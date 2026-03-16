@@ -1,0 +1,3957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMK Advisory - HR Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        /* ============ LOGIN PAGE ============ */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-box {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            padding: 40px;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .company-logo {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .login-header h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .login-header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .role-selection {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .role-option {
+            position: relative;
+        }
+
+        .role-option input[type="radio"] {
+            display: none;
+        }
+
+        .role-option label {
+            display: block;
+            padding: 15px;
+            text-align: center;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0;
+        }
+
+        .role-option input[type="radio"]:checked + label {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .demo-creds {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .demo-creds strong {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        /* ============ DASHBOARD & MAIN APP ============ */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+            background: #f5f7fa;
+        }
+
+        .app-container.active {
+            display: flex;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: #2c3e50;
+            color: white;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo {
+            font-size: 32px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .user-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .user-info .name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .user-info .role {
+            color: #aaa;
+        }
+
+        .nav-menu {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 10px;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 12px 15px;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            background: rgba(102, 126, 234, 0.2);
+            border-left-color: #667eea;
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .logout-btn {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logout-btn .nav-link {
+            color: #e74c3c;
+        }
+
+        .logout-btn .nav-link:hover {
+            background: rgba(231, 76, 60, 0.1);
+            border-left-color: #e74c3c;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .topbar {
+            background: white;
+            padding: 20px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: -30px -30px 30px -30px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 300px;
+            margin: 0 30px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .notification-bell {
+            font-size: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #e74c3c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+
+        /* ============ DASHBOARD ============ */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+        }
+
+        .card:hover {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.12);
+            transform: translateY(-5px);
+        }
+
+        .stat-card {
+            position: relative;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .stat-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 32px;
+            opacity: 0.1;
+        }
+
+        .chart-container {
+            height: 300px;
+            margin-top: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th {
+            background: #f5f5f5;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        .table td {
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .table tbody tr:hover {
+            background: #f9f9f9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .badge-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-danger {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-info {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        /* ============ FORMS ============ */
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .form-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+        }
+
+        .btn-secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* ============ MODAL ============ */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+
+        /* ============ TABS ============ */
+        .tabs {
+            display: flex;
+            gap: 0;
+            border-bottom: 2px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 15px 20px;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ============ RESPONSIVE ============ */
+        @media (max-width: 768px) {
+            .app-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                display: flex;
+                overflow-x: auto;
+                padding: 15px;
+            }
+
+            .sidebar-header {
+                margin-bottom: 0;
+                padding-bottom: 0;
+                border-bottom: none;
+                margin-right: 20px;
+            }
+
+            .nav-menu {
+                display: flex;
+                gap: 10px;
+                flex: 1;
+            }
+
+            .nav-item {
+                margin-bottom: 0;
+                white-space: nowrap;
+            }
+
+            .nav-link {
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+
+            .logout-btn {
+                margin-top: 0;
+                padding-top: 0;
+                border-top: none;
+                margin-left: auto;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .topbar {
+                flex-direction: column;
+                gap: 15px;
+                padding: 15px 20px;
+                margin: -20px -20px 20px -20px;
+            }
+
+            .search-bar {
+                max-width: 100%;
+            }
+
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .role-selection {
+                grid-template-columns: 1fr;
+            }
+
+            .table {
+                font-size: 13px;
+            }
+
+            .table th,
+            .table td {
+                padding: 10px;
+            }
+
+            @media (max-width: 480px) {
+                .login-box {
+                    padding: 25px;
+                }
+
+                .page-title {
+                    font-size: 20px;
+                }
+
+                .form-row {
+                    grid-template-columns: 1fr;
+                }
+
+                .btn-group {
+                    flex-direction: column;
+                }
+
+                .btn-group .btn {
+                    width: 100%;
+                }
+            }
+        }
+
+        /* ============ CALENDAR ============ */
+        .calendar {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-day {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+        }
+
+        .day-item {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+        }
+
+        .day-item:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        .day-item.holiday {
+            background: #f8d7da;
+            color: #721c24;
+            font-weight: 600;
+        }
+
+        /* ============ ALERTS ============ */
+        .alert {
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-muted {
+            color: #999;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            display: none;
+        }
+
+        .file-list {
+            margin-top: 15px;
+        }
+
+        .file-item {
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .file-item a {
+            color: #667eea;
+            text-decoration: none;
+        }
+
+        .file-item a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ============ LOGIN PAGE ============ -->
+<div id="loginPage" class="login-container">
+    <div class="login-box">
+        <div class="login-header">
+            <div class="company-logo">🏢</div>
+            <h1>AMK Advisory</h1>
+            <p>HR Management System</p>
+        </div>
+
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" placeholder="Enter username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+
+            <div class="demo-creds">
+                <strong>🔑 Default Admin Login:</strong><br>
+                Username: amkadvisory<br>
+                Password: amk123<br><br>
+                <small>👉 Ask admin to create your employee/HR credentials</small>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ============ MAIN APPLICATION ============ -->
+<div id="appContainer" class="app-container">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">🏢</div>
+            <div class="sidebar-title">AMK</div>
+        </div>
+
+        <div class="user-info">
+            <div class="name" id="sidebarUserName">User Name</div>
+            <div class="role" id="sidebarUserRole">Role</div>
+        </div>
+
+        <ul class="nav-menu">
+            <li class="nav-item">
+                <a class="nav-link active" onclick="navigateTo('dashboard')">
+                    📊 Dashboard
+                </a>
+            </li>
+            <li class="nav-item admin-only hr-only" id="employeesNavItem">
+                <a class="nav-link" onclick="navigateTo('employees')">
+                    👥 Employees
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="navigateTo('leaves')">
+                    📝 Absence Management
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="navigateTo('selfservice')">
+                    💼 Self Service
+                </a>
+            </li>
+            <li class="nav-item admin-only hr-only" id="performanceNavItem">
+                <a class="nav-link" onclick="navigateTo('performance')">
+                    ⭐ Performance Reviews
+                </a>
+            </li>
+            <li class="nav-item admin-only hr-only" id="analyticsNavItem">
+                <a class="nav-link" onclick="navigateTo('analytics')">
+                    📈 Analytics & Reports
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="navigateTo('policies')">
+                    📄 Policies & Letters
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="navigateTo('announcements')">
+                    📢 Announcements
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="navigateTo('holidays')">
+                    🗓️ Holiday Calendar
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" onclick="navigateTo('attendance')">
+                    ✓ Attendance
+                </a>
+            </li>
+            <li class="nav-item" id="accountsNavItem" style="display: none;">
+                <a class="nav-link" onclick="navigateTo('accounts')">
+                    💳 Accounts
+                </a>
+            </li>
+            <li class="nav-item admin-only hr-only" id="payrollNavItem">
+                <a class="nav-link" onclick="navigateTo('payroll')">
+                    💰 Payroll
+                </a>
+            </li>
+            <li class="nav-item admin-only hr-only" id="trainingNavItem">
+                <a class="nav-link" onclick="navigateTo('training')">
+                    🎓 Training & Development
+                </a>
+            </li>
+            <li class="nav-item admin-only hr-only" id="recruitmentNavItem">
+                <a class="nav-link" onclick="navigateTo('recruitment')">
+                    🔍 Recruitment
+                </a>
+            </li>
+            <li class="nav-item admin-only" id="settingsNavItem">
+                <a class="nav-link" onclick="navigateTo('settings')">
+                    ⚙️ Settings
+                </a>
+            </li>
+
+            <li class="nav-item logout-btn">
+                <a class="nav-link" onclick="handleLogout()">
+                    🚪 Logout
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+        <!-- TOPBAR -->
+        <div class="topbar">
+            <h1 class="page-title" id="pageTitle">Dashboard</h1>
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search...">
+            </div>
+            <div class="topbar-actions">
+                <div class="notification-bell" onclick="showNotifications()">
+                    🔔
+                    <span class="notification-badge" id="notificationCount">3</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DASHBOARD PAGE -->
+        <div id="dashboardPage" class="page-content">
+            <div class="alert alert-info" id="dateAlert">
+                📅 Current Date: <span id="currentDate">Loading...</span>
+            </div>
+
+            <div class="dashboard-grid">
+                <div class="card stat-card">
+                    <div class="stat-value" id="totalEmployees">450</div>
+                    <div class="stat-label">Total Employees</div>
+                    <div class="stat-icon">👥</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-value" id="presentToday">380</div>
+                    <div class="stat-label">Present Today</div>
+                    <div class="stat-icon">✓</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-value" id="onLeaveToday">45</div>
+                    <div class="stat-label">On Leave Today</div>
+                    <div class="stat-icon">📝</div>
+                </div>
+                <div class="card stat-card">
+                    <div class="stat-value" id="pendingReviews">12</div>
+                    <div class="stat-label">Pending Reviews</div>
+                    <div class="stat-icon">⭐</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="form-title">Upcoming Holidays</h3>
+                <div id="upcomingHolidaysList">
+                    <div style="padding: 15px; text-align: center; color: #999;">Loading...</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="form-title">Recent Announcements</h3>
+                <div id="recentAnnouncements">
+                    <div style="padding: 15px; text-align: center; color: #999;">No announcements yet</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- EMPLOYEES PAGE -->
+        <div id="employeesPage" class="page-content hidden">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 class="form-title" style="margin: 0;">Employee Directory</h3>
+                    <button class="btn btn-primary" style="width: auto;" onclick="showAddEmployeeModal()">+ Add Employee</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Position</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Email</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTableBody">
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- LEAVES/ABSENCE PAGE -->
+        <div id="leavesPage" class="page-content hidden">
+            <div class="card">
+                <h3 class="form-title">Absence Management</h3>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('leaveRequest')">Request Leave</button>
+                    <button class="tab" onclick="switchTab('leaveHistory')">My Leaves</button>
+                    <button class="tab admin-only hr-only" onclick="switchTab('approveLeaves')">Approve Leaves</button>
+                </div>
+
+                <!-- Request Leave Tab -->
+                <div id="leaveRequest" class="tab-content active">
+                    <form onsubmit="submitLeaveRequest(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>From Date</label>
+                                <input type="date" id="leaveFromDate" required onchange="calculateLeaveDays()">
+                            </div>
+                            <div class="form-group">
+                                <label>To Date</label>
+                                <input type="date" id="leaveToDate" required onchange="calculateLeaveDays()">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Leave Type</label>
+                                <select id="leaveType" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="sick">Sick Leave</option>
+                                    <option value="casual">Casual Leave</option>
+                                    <option value="annual">Annual Leave</option>
+                                    <option value="personal">Personal Leave</option>
+                                    <option value="maternity">Maternity Leave</option>
+                                    <option value="paternity">Paternity Leave</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Number of Days</label>
+                                <input type="number" id="leaveDays" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row form-group-full">
+                            <div class="form-group">
+                                <label>Reason</label>
+                                <textarea id="leaveReason" required placeholder="Provide reason for leave..."></textarea>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Submit Request</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Leave History Tab -->
+                <div id="leaveHistory" class="tab-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Type</th>
+                                <th>Days</th>
+                                <th>Status</th>
+                                <th>Reason</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaveHistoryBody">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">No leave records</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Approve Leaves Tab -->
+                <div id="approveLeaves" class="tab-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>From</th>
+                                <th>To</th>
+                                <th>Type</th>
+                                <th>Days</th>
+                                <th>Reason</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="approveLeaveBody">
+                            <tr>
+                                <td colspan="8" class="text-center text-muted">No pending requests</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SELF SERVICE PAGE -->
+        <div id="selfservicePage" class="page-content hidden">
+            <div class="dashboard-grid">
+                <div id="profileCard" class="card" onclick="navigateTo('profile')" style="cursor: pointer;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 40px; margin-bottom: 10px;">👤</div>
+                        <h3>Personal Profile</h3>
+                        <p style="color: #999; font-size: 14px;">View and update your information</p>
+                    </div>
+                </div>
+                <div id="salaryCard" class="card" onclick="navigateTo('salaryslip')" style="cursor: pointer;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 40px; margin-bottom: 10px;">💰</div>
+                        <h3>Salary Slips</h3>
+                        <p style="color: #999; font-size: 14px;">Download your salary slips</p>
+                    </div>
+                </div>
+                <div id="documentsCard" class="card" onclick="navigateTo('documents')" style="cursor: pointer;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 40px; margin-bottom: 10px;">📦</div>
+                        <h3>My Documents</h3>
+                        <p style="color: #999; font-size: 14px;">View your documents</p>
+                    </div>
+                </div>
+                <div id="expensesCard" class="card" onclick="navigateTo('expenses')" style="cursor: pointer;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 40px; margin-bottom: 10px;">💸</div>
+                        <h3>Expense Claim</h3>
+                        <p style="color: #999; font-size: 14px;">Submit expense claims</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROFILE EDIT -->
+            <div id="profileTab" class="hidden">
+                <div class="card">
+                    <h3 class="form-title">My Profile</h3>
+                    <form onsubmit="saveProfile(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" id="profileFirstName" value="John">
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" id="profileLastName" value="Smith">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="profileEmail" value="john.smith@amkadvisory.com">
+                            </div>
+                            <div class="form-group">
+                                <label>Phone</label>
+                                <input type="tel" id="profilePhone" value="+1234567890">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Department</label>
+                                <input type="text" id="profileDepartment" value="HR" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Position</label>
+                                <input type="text" id="profilePosition" value="HR Manager" readonly>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date of Birth</label>
+                                <input type="date" id="profileDOB">
+                            </div>
+                            <div class="form-group">
+                                <label>Address</label>
+                                <input type="text" id="profileAddress" placeholder="Street address">
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary" onclick="navigateTo('selfservice')">Back</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- SALARY SLIP -->
+            <div id="salaryslipTab" class="hidden">
+                <div class="card">
+                    <h3 class="form-title">Salary Slips</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Select Month</label>
+                            <input type="month" id="salaryMonth">
+                        </div>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Gross Salary</th>
+                                <th>Deductions</th>
+                                <th>Net Salary</th>
+                                <th>Download</th>
+                            </tr>
+                        </thead>
+                        <tbody id="salarySlipBody">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No salary slips available</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="navigateTo('selfservice')">Back</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DOCUMENTS -->
+            <div id="documentsTab" class="hidden">
+                <div class="card">
+                    <h3 class="form-title">My Documents</h3>
+                    <div class="file-list" id="myDocumentsList">
+                        <div style="padding: 15px; text-align: center; color: #999;">No documents found</div>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-secondary" onclick="navigateTo('selfservice')">Back</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- EXPENSES -->
+            <div id="expensesTab" class="hidden">
+                <div class="card">
+                    <h3 class="form-title">Expense Claims</h3>
+                    <form onsubmit="submitExpense(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expense Date</label>
+                                <input type="date" id="expenseDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Category</label>
+                                <select id="expenseCategory" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="travel">Travel</option>
+                                    <option value="meals">Meals</option>
+                                    <option value="accommodation">Accommodation</option>
+                                    <option value="office">Office Supplies</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Amount</label>
+                                <input type="number" id="expenseAmount" step="0.01" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Payment Method</label>
+                                <select id="expensePaymentMethod" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="cash">Cash</option>
+                                    <option value="card">Card</option>
+                                    <option value="online">Online</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row form-group-full">
+                            <div class="form-group">
+                                <label>Description</label>
+                                <textarea id="expenseDescription" placeholder="Provide expense details..."></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row form-group-full">
+                            <div class="form-group">
+                                <label>Receipt/Bill Upload</label>
+                                <div class="file-input-wrapper">
+                                    <input type="file" id="expenseReceipt" accept="image/*,.pdf">
+                                    <button type="button" class="btn btn-secondary">Choose File</button>
+                                </div>
+                                <div id="selectedFile" style="margin-top: 10px; font-size: 13px; color: #999;"></div>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary" onclick="navigateTo('selfservice')">Back</button>
+                            <button type="submit" class="btn btn-primary">Submit Claim</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- PERFORMANCE REVIEWS PAGE -->
+        <div id="performancePage" class="page-content hidden">
+            <div class="card">
+                <h3 class="form-title">Performance Reviews & Appraisals</h3>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('performanceList')">Reviews</button>
+                    <button class="tab employee-only" onclick="switchTab('selfAppraisal')">Self Appraisal</button>
+                </div>
+
+                <div id="performanceList" class="tab-content active">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Reviewer</th>
+                                <th>Period</th>
+                                <th>Rating</th>
+                                <th>Status</th>
+                                <th>View</th>
+                            </tr>
+                        </thead>
+                        <tbody id="performanceTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">No reviews available</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="selfAppraisal" class="tab-content">
+                    <form onsubmit="submitSelfAppraisal(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Review Period</label>
+                                <input type="month" id="appraisalPeriod" required>
+                            </div>
+                        </div>
+                        <div class="form-row form-group-full">
+                            <div class="form-group">
+                                <label>Key Achievements</label>
+                                <textarea id="achievements" placeholder="Describe your key achievements..." required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row form-group-full">
+                            <div class="form-group">
+                                <label>Areas for Improvement</label>
+                                <textarea id="improvements" placeholder="Identify areas you want to improve..." required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row form-group-full">
+                            <div class="form-group">
+                                <label>Goals for Next Period</label>
+                                <textarea id="goals" placeholder="Set goals for the next period..." required></textarea>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Self Rating (1-5)</label>
+                                <select id="selfRating" required>
+                                    <option value="">-- Select --</option>
+                                    <option value="1">1 - Poor</option>
+                                    <option value="2">2 - Below Average</option>
+                                    <option value="3">3 - Average</option>
+                                    <option value="4">4 - Above Average</option>
+                                    <option value="5">5 - Excellent</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYTICS PAGE -->
+        <div id="analyticsPage" class="page-content hidden">
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3 class="form-title">Employee Distribution</h3>
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <p style="margin-bottom: 20px;">📊 Department-wise distribution chart</p>
+                        <div id="deptChart">IT: 120 | HR: 45 | Sales: 150 | Finance: 85 | Operations: 50</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="form-title">Attendance Analytics</h3>
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <p style="margin-bottom: 20px;">📈 Average Attendance Trend</p>
+                        <div>Present: 84.5% | Leave: 12% | Absent: 3.5%</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="form-title">Leave Statistics</h3>
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <p style="margin-bottom: 20px;">📋 Leave type usage</p>
+                        <div>Sick: 25% | Casual: 40% | Annual: 30% | Other: 5%</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3 class="form-title">Turnover Rate</h3>
+                    <div style="padding: 40px; text-align: center; color: #999;">
+                        <p style="margin-bottom: 20px;">📊 Annual turnover</p>
+                        <div>Current Year: 5.2% | Last Year: 6.1%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 class="form-title">Custom Reports</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Report Type</label>
+                        <select id="reportType">
+                            <option>Employee Summary</option>
+                            <option>Absence Analysis</option>
+                            <option>Payroll Report</option>
+                            <option>Performance Summary</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date Range</label>
+                        <input type="month" id="reportMonth">
+                    </div>
+                    <div style="display: flex; align-items: flex-end;">
+                        <button class="btn btn-primary" style="width: auto;">Generate Report</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- POLICIES & LETTERS PAGE -->
+        <div id="policiesPage" class="page-content hidden">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 class="form-title" style="margin: 0;">Policies & Documents</h3>
+                    <button class="btn btn-primary admin-only hr-only" style="width: auto; display: none;" onclick="showUploadPolicyModal()">+ Upload Document</button>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('policiesList')">Policies</button>
+                    <button class="tab" onclick="switchTab('lettersList')">Letters</button>
+                </div>
+
+                <div id="policiesList" class="tab-content active">
+                    <div id="policiesContent">
+                        <div class="file-list">
+                            <div class="file-item">
+                                <div>
+                                    <strong>📄 Company Code of Conduct</strong>
+                                    <p style="font-size: 12px; color: #999;">Updated: 2024-01-15</p>
+                                </div>
+                                <a href="#">Download</a>
+                            </div>
+                            <div class="file-item">
+                                <div>
+                                    <strong>📄 Leave Policy</strong>
+                                    <p style="font-size: 12px; color: #999;">Updated: 2024-02-01</p>
+                                </div>
+                                <a href="#">Download</a>
+                            </div>
+                            <div class="file-item">
+                                <div>
+                                    <strong>📄 Attendance Policy</strong>
+                                    <p style="font-size: 12px; color: #999;">Updated: 2024-02-10</p>
+                                </div>
+                                <a href="#">Download</a>
+                            </div>
+                            <div class="file-item">
+                                <div>
+                                    <strong>📄 IT Security Policy</strong>
+                                    <p style="font-size: 12px; color: #999;">Updated: 2024-03-05</p>
+                                </div>
+                                <a href="#">Download</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="lettersList" class="tab-content">
+                    <div id="lettersContent">
+                        <div class="file-list">
+                            <div class="file-item">
+                                <div>
+                                    <strong>📨 Appointment Letter Template</strong>
+                                    <p style="font-size: 12px; color: #999;">Updated: 2024-01-20</p>
+                                </div>
+                                <a href="#">Download</a>
+                            </div>
+                            <div class="file-item">
+                                <div>
+                                    <strong>📨 Resignation Acceptance Template</strong>
+                                    <p style="font-size: 12px; color: #999;">Updated: 2024-02-15</p>
+                                </div>
+                                <a href="#">Download</a>
+                            </div>
+                            <div class="file-item">
+                                <div>
+                                    <strong>📨 Warning Letter Template</strong>
+                                    <p style="font-size: 12px; color: #999;">Updated: 2024-03-01</p>
+                                </div>
+                                <a href="#">Download</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANNOUNCEMENTS PAGE -->
+        <div id="announcementsPage" class="page-content hidden">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 class="form-title" style="margin: 0;">Announcements & Notices</h3>
+                    <button class="btn btn-primary admin-only hr-only" style="width: auto; display: none;" onclick="showAnnouncementModal()">+ New Announcement</button>
+                </div>
+
+                <div id="announcementsList">
+                    <div style="display: flex; flex-direction: column; gap: 15px;">
+                        <div style="padding: 15px; background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 8px;">
+                            <h4 style="margin-bottom: 5px;">🔔 Office Renovation Starting</h4>
+                            <p style="font-size: 13px; color: #666; margin-bottom: 8px;">The office floor 3 will be under renovation from March 20-30. Please ensure to clear your workspaces.</p>
+                            <p style="font-size: 12px; color: #999;">Posted on: 2026-03-15 by Admin</p>
+                        </div>
+                        <div style="padding: 15px; background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 8px;">
+                            <h4 style="margin-bottom: 5px;">📢 New Employee Onboarding Program</h4>
+                            <p style="font-size: 13px; color: #666; margin-bottom: 8px;">We are launching a new onboarding program starting next month. All new hires will benefit from enhanced training modules.</p>
+                            <p style="font-size: 12px; color: #999;">Posted on: 2026-03-10 by HR</p>
+                        </div>
+                        <div style="padding: 15px; background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 8px;">
+                            <h4 style="margin-bottom: 5px;">🎉 Company Annual Day Celebration</h4>
+                            <p style="font-size: 13px; color: #666; margin-bottom: 8px;">Join us on April 5th for our Annual Company Day celebration with games, prizes, and team activities!</p>
+                            <p style="font-size: 12px; color: #999;">Posted on: 2026-03-05 by Events</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HOLIDAY CALENDAR PAGE -->
+        <div id="holidaysPage" class="page-content hidden">
+            <div class="card">
+                <h3 class="form-title">Holiday Calendar 2026</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Select Month</label>
+                        <select id="holidayMonth" onchange="updateHolidayCalendar()">
+                            <option value="0">January</option>
+                            <option value="1">February</option>
+                            <option value="2" selected>March</option>
+                            <option value="3">April</option>
+                            <option value="4">May</option>
+                            <option value="5">June</option>
+                            <option value="6">July</option>
+                            <option value="7">August</option>
+                            <option value="8">September</option>
+                            <option value="9">October</option>
+                            <option value="10">November</option>
+                            <option value="11">December</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="calendar">
+                    <div class="calendar-header">
+                        <h4 id="calendarMonth">March 2026</h4>
+                    </div>
+                    <div style="margin-bottom: 15px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;">
+                        <div style="text-align: center; font-weight: 600; color: #999; font-size: 12px;">SUN</div>
+                        <div style="text-align: center; font-weight: 600; color: #999; font-size: 12px;">MON</div>
+                        <div style="text-align: center; font-weight: 600; color: #999; font-size: 12px;">TUE</div>
+                        <div style="text-align: center; font-weight: 600; color: #999; font-size: 12px;">WED</div>
+                        <div style="text-align: center; font-weight: 600; color: #999; font-size: 12px;">THU</div>
+                        <div style="text-align: center; font-weight: 600; color: #999; font-size: 12px;">FRI</div>
+                        <div style="text-align: center; font-weight: 600; color: #999; font-size: 12px;">SAT</div>
+                    </div>
+                    <div id="calendarDays" class="calendar-day"></div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <h4 style="margin-bottom: 15px;">🎊 Holidays in 2026</h4>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Holiday</th>
+                                <th>Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2026-01-26</td>
+                                <td>Republic Day</td>
+                                <td><span class="badge badge-info">National</span></td>
+                            </tr>
+                            <tr>
+                                <td>2026-03-08</td>
+                                <td>Maha Shivaratri</td>
+                                <td><span class="badge badge-info">Religious</span></td>
+                            </tr>
+                            <tr>
+                                <td>2026-04-10</td>
+                                <td>Good Friday</td>
+                                <td><span class="badge badge-info">Religious</span></td>
+                            </tr>
+                            <tr>
+                                <td>2026-04-14</td>
+                                <td>Ambedkar Jayanti</td>
+                                <td><span class="badge badge-info">National</span></td>
+                            </tr>
+                            <tr>
+                                <td>2026-05-01</td>
+                                <td>Labour Day</td>
+                                <td><span class="badge badge-info">National</span></td>
+                            </tr>
+                            <tr>
+                                <td>2026-08-15</td>
+                                <td>Independence Day</td>
+                                <td><span class="badge badge-info">National</span></td>
+                            </tr>
+                            <tr>
+                                <td>2026-10-02</td>
+                                <td>Gandhi Jayanti</td>
+                                <td><span class="badge badge-info">National</span></td>
+                            </tr>
+                            <tr>
+                                <td>2026-12-25</td>
+                                <td>Christmas Day</td>
+                                <td><span class="badge badge-info">Religious</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ATTENDANCE PAGE -->
+        <div id="attendancePage" class="page-content hidden">
+            <div class="card">
+                <h3 class="form-title">Attendance Tracking</h3>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('attendanceView')">My Attendance</button>
+                    <button class="tab admin-only hr-only" onclick="switchTab('attendanceManage')">Manage Attendance</button>
+                </div>
+
+                <div id="attendanceView" class="tab-content active">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Select Month</label>
+                            <input type="month" id="attendanceMonth" onchange="loadAttendanceData()">
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Check-In</th>
+                                    <th>Check-Out</th>
+                                    <th>Duration</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attendanceBody">
+                                <tr>
+                                    <td colspan="5" class="text-center text-muted">Select a month to view data</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="attendanceManage" class="tab-content">
+                    <form onsubmit="markAttendance(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="attendanceDate" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Check-In Time</label>
+                                <input type="time" id="checkInTime" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Check-Out Time</label>
+                                <input type="time" id="checkOutTime" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Status</label>
+                                <select id="attendanceStatus" required>
+                                    <option value="present">Present</option>
+                                    <option value="absent">Absent</option>
+                                    <option value="halfday">Half Day</option>
+                                    <option value="wfh">Work From Home</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row form-group-full">
+                            <div class="form-group">
+                                <label>Remarks</label>
+                                <textarea id="attendanceRemarks" placeholder="Add any remarks..."></textarea>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Mark Attendance</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ACCOUNTS PAGE -->
+        <div id="accountsPage" class="page-content hidden">
+            <div id="accountsAccessNote" style="display: none;" class="alert alert-info" style="margin-bottom: 20px;">
+                👁️ <strong>View-Only Access:</strong> As an Accounts department member, you have read-only access to financial account data for reference with payroll operations.
+            </div>
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3 class="form-title" style="margin: 0;">Accounts Management</h3>
+                    <button id="addAccountBtn" class="btn btn-primary" style="width: auto;" onclick="showAddAccountModal()">+ Add Account</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Account ID</th>
+                            <th>Account Name</th>
+                            <th>Account Type</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Date Created</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="accountsTableBody">
+                        <tr>
+                            <td colspan="7" class="text-center text-muted">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PAYROLL PAGE -->
+        <div id="payrollPage" class="page-content hidden">
+            <div class="alert alert-info" style="margin-bottom: 20px;">
+                💳 <strong>Financial & Accounts Section:</strong> This module is for managing employee payroll, salary details, and financial transactions. Access is restricted to authorized accounting personnel.
+            </div>
+            <div class="card">
+                <h3 class="form-title">Payroll Management</h3>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('payrollList')">Salary Details</button>
+                    <button class="tab" onclick="switchTab('payrollProcess')">Process Payroll</button>
+                </div>
+
+                <div id="payrollList" class="tab-content active">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Employee</th>
+                                <th>Position</th>
+                                <th>Monthly Salary</th>
+                                <th>Arrears</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="payrollTableBody">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="payrollProcess" class="tab-content">
+                    <form onsubmit="processPayroll(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Payroll Month</label>
+                                <input type="month" id="payrollMonth" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Payment Date</label>
+                                <input type="date" id="payrollPaymentDate" required>
+                            </div>
+                        </div>
+                        <div class="form-row form-group-full">
+                            <div class="form-group">
+                                <label>Notes</label>
+                                <textarea id="payrollNotes" placeholder="Add payroll processing notes..."></textarea>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Process Payroll</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- TRAINING PAGE -->
+        <div id="trainingPage" class="page-content hidden">
+            <div class="card">
+                <h3 class="form-title">Training & Development Programs</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span></span>
+                    <button class="btn btn-primary" style="width: auto;" onclick="showTrainingModal()">+ Add Training</button>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('trainingList')">All Programs</button>
+                    <button class="tab" onclick="switchTab('myTraining')">My Training</button>
+                </div>
+
+                <div id="trainingList" class="tab-content active">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Program Name</th>
+                                <th>Trainer</th>
+                                <th>Date</th>
+                                <th>Duration</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="trainingTableBody">
+                            <tr>
+                                <td>Leadership Development</td>
+                                <td>John Trainer</td>
+                                <td>2026-04-15</td>
+                                <td>3 days</td>
+                                <td><span class="badge badge-warning">Upcoming</span></td>
+                                <td><button class="btn btn-primary" style="width: auto; padding: 5px 10px; font-size: 12px;">Enroll</button></td>
+                            </tr>
+                            <tr>
+                                <td>Advanced Excel Skills</td>
+                                <td>Jane Smith</td>
+                                <td>2026-04-01</td>
+                                <td>2 days</td>
+                                <td><span class="badge badge-warning">Upcoming</span></td>
+                                <td><button class="btn btn-primary" style="width: auto; padding: 5px 10px; font-size: 12px;">Enroll</button></td>
+                            </tr>
+                            <tr>
+                                <td>Communication Skills</td>
+                                <td>Mike Johnson</td>
+                                <td>2026-03-20</td>
+                                <td>2 days</td>
+                                <td><span class="badge badge-success">Completed</span></td>
+                                <td><button class="btn btn-secondary" style="width: auto; padding: 5px 10px; font-size: 12px;">Certificate</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="myTraining" class="tab-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Program</th>
+                                <th>Completed</th>
+                                <th>Score</th>
+                                <th>Certificate</th>
+                            </tr>
+                        </thead>
+                        <tbody id="myTrainingBody">
+                            <tr>
+                                <td>Microsoft Teams Training</td>
+                                <td>2025-10-20</td>
+                                <td>92%</td>
+                                <td><a href="#" style="color: #667eea;">Download</a></td>
+                            </tr>
+                            <tr>
+                                <td>Data Security Awareness</td>
+                                <td>2025-09-15</td>
+                                <td>88%</td>
+                                <td><a href="#" style="color: #667eea;">Download</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- RECRUITMENT PAGE -->
+        <div id="recruitmentPage" class="page-content hidden">
+            <div class="card">
+                <h3 class="form-title">Recruitment Management</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span></span>
+                    <button class="btn btn-primary" style="width: auto;" onclick="showJobPostingModal()">+ Create Job Posting</button>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('activeJobs')">Active Job Postings</button>
+                    <button class="tab" onclick="switchTab('applications')">Applications</button>
+                </div>
+
+                <div id="activeJobs" class="tab-content active">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Job Title</th>
+                                <th>Department</th>
+                                <th>Posted Date</th>
+                                <th>Applications</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="activeJobsBody">
+                            <tr>
+                                <td>Senior Software Engineer</td>
+                                <td>IT</td>
+                                <td>2026-02-15</td>
+                                <td>15</td>
+                                <td><span class="badge badge-warning">Open</span></td>
+                                <td><button class="btn btn-secondary" style="width: auto; padding: 5px 10px; font-size: 12px;">Edit</button></td>
+                            </tr>
+                            <tr>
+                                <td>Marketing Executive</td>
+                                <td>Marketing</td>
+                                <td>2026-02-20</td>
+                                <td>8</td>
+                                <td><span class="badge badge-warning">Open</span></td>
+                                <td><button class="btn btn-secondary" style="width: auto; padding: 5px 10px; font-size: 12px;">Edit</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="applications" class="tab-content">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Candidate</th>
+                                <th>Position</th>
+                                <th>Applied Date</th>
+                                <th>Rating</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="applicationsBody">
+                            <tr>
+                                <td>Alex Kumar</td>
+                                <td>Senior Software Engineer</td>
+                                <td>2026-03-10</td>
+                                <td>4.5/5</td>
+                                <td><span class="badge badge-info">In Review</span></td>
+                                <td><button class="btn btn-secondary" style="width: auto; padding: 5px 10px; font-size: 12px;">View</button></td>
+                            </tr>
+                            <tr>
+                                <td>Sarah Williams</td>
+                                <td>Marketing Executive</td>
+                                <td>2026-03-12</td>
+                                <td>4/5</td>
+                                <td><span class="badge badge-warning">Interview</span></td>
+                                <td><button class="btn btn-secondary" style="width: auto; padding: 5px 10px; font-size: 12px;">View</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SETTINGS PAGE -->
+        <div id="settingsPage" class="page-content hidden">
+            <div class="card">
+                <h3 class="form-title">System Settings</h3>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('generalSettings')">General</button>
+                    <button class="tab" onclick="switchTab('userManagement')">User Management</button>
+                    <button class="tab" onclick="switchTab('selfServiceOptions')">Self-Service Options</button>
+                    <button class="tab" onclick="switchTab('systemSettings')">System</button>
+                </div>
+
+                <div id="generalSettings" class="tab-content active">
+                    <form onsubmit="saveSettings(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Company Name</label>
+                                <input type="text" id="companyName" value="AMK Advisory">
+                            </div>
+                            <div class="form-group">
+                                <label>Company Email</label>
+                                <input type="email" id="companyEmail" value="info@amkadvisory.com">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Company Phone</label>
+                                <input type="tel" id="companyPhone" value="+1-800-123-4567">
+                            </div>
+                            <div class="form-group">
+                                <label>Timezone</label>
+                                <select id="timezone">
+                                    <option>UTC</option>
+                                    <option>IST (UTC+5:30)</option>
+                                    <option>EST (UTC-5)</option>
+                                    <option>PST (UTC-8)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row form-group-full">
+                            <div class="form-group">
+                                <label>Address</label>
+                                <textarea id="companyAddress">123 Business Street, City, Country 12345</textarea>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+
+                <div id="userManagement" class="tab-content">
+                    <div style="margin-bottom: 20px;">
+                        <button class="btn btn-primary" style="width: auto;" onclick="showAddUserModal()">+ Create New User</button>
+                    </div>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Name</th>
+                                <th>Role</th>
+                                <th>Email</th>
+                                <th>Created Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userManagementBody">
+                            <tr>
+                                <td colspan="6" class="text-center text-muted">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div id="selfServiceOptions" class="tab-content">
+                    <h4 style="margin-bottom: 20px; color: #2c3e50;">Configure which self-service modules are available to employees</h4>
+                    <div class="form-row form-group-full">
+                        <div class="form-group">
+                            <label style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                                <input type="checkbox" id="enableProfileEdit" checked onchange="toggleSelfService('profileEdit', this.checked)">
+                                <span><strong>Edit Personal Profile</strong><br><small>Employees can edit their personal information, contact details, address, etc.</small></span>
+                            </label>
+                            <label style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                                <input type="checkbox" id="enableSalarySlips" checked onchange="toggleSelfService('salarySlips', this.checked)">
+                                <span><strong>View Salary Slips</strong><br><small>Employees can view and download their salary slips</small></span>
+                            </label>
+                            <label style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                                <input type="checkbox" id="enableDocuments" checked onchange="toggleSelfService('documents', this.checked)">
+                                <span><strong>Access Documents</strong><br><small>Employees can view and download their personal documents</small></span>
+                            </label>
+                            <label style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                                <input type="checkbox" id="enableExpenseClaims" checked onchange="toggleSelfService('expenseClaims', this.checked)">
+                                <span><strong>Submit Expense Claims</strong><br><small>Employees can submit and track expense claims</small></span>
+                            </label>
+                            <label style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                                <input type="checkbox" id="enableLeaveRequest" checked onchange="toggleSelfService('leaveRequest', this.checked)">
+                                <span><strong>Submit Leave Requests</strong><br><small>Employees can request and view leave history</small></span>
+                            </label>
+                            <label style="display: flex; gap: 15px; align-items: center; margin-bottom: 15px;">
+                                <input type="checkbox" id="enablePerformance" checked onchange="toggleSelfService('performance', this.checked)">
+                                <span><strong>Self-Appraisal</strong><br><small>Employees can submit self-appraisal reviews</small></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="systemSettings" class="tab-content">
+                    <div style="margin-bottom: 30px; padding: 20px; background: #fff3cd; border: 2px solid #ffc107; border-radius: 8px;">
+                        <h4 style="color: #856404; margin-top: 0;">⚠️ Danger Zone - System Reset</h4>
+                        <p style="color: #856404; margin-bottom: 15px;">This will permanently delete ALL data including employees, leaves, announcements, attendance, and expenses. The admin account will remain. <strong>This action cannot be undone!</strong></p>
+                        <button type="button" onclick="resetSystemConfirm()" class="btn" style="background: #e74c3c; color: white; width: auto;">
+                            🗑️ Reset Entire System
+                        </button>
+                    </div>
+                    <form onsubmit="saveSystemSettings(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Employee ID Format</label>
+                                <input type="text" id="empIdFormat" value="AMK-{YYYY}-{0000}">
+                            </div>
+                            <div class="form-group">
+                                <label>Financial Year Start</label>
+                                <select id="finYearStart">
+                                    <option value="1">January</option>
+                                    <option value="4" selected>April</option>
+                                    <option value="7">July</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Working Days Per Week</label>
+                                <input type="number" id="workingDays" value="5" min="1" max="7">
+                            </div>
+                            <div class="form-group">
+                                <label>Working Hours Per Day</label>
+                                <input type="number" id="workingHours" value="8" min="1" max="12">
+                            </div>
+                        </div>
+                        <div class="form-row form-group-full">
+                            <div class="form-group">
+                                <label style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                                    <input type="checkbox" id="enableBiometric" checked>
+                                    Enable Biometric Attendance
+                                </label>
+                                <label style="display: flex; gap: 10px; align-items: center; margin-bottom: 15px;">
+                                    <input type="checkbox" id="enableNotifications" checked>
+                                    Enable Email Notifications
+                                </label>
+                                <label style="display: flex; gap: 10px; align-items: center;">
+                                    <input type="checkbox" id="enableMobileApp" checked>
+                                    Enable Mobile App Login
+                                </label>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button type="reset" class="btn btn-secondary">Reset</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============ MODALS ============ -->
+
+<!-- Add Employee Modal -->
+<div id="addEmployeeModal" class="modal">
+    <div class="modal-content">
+        <h3 class="modal-header">Add New Employee</h3>
+        <button class="modal-close" onclick="closeModal('addEmployeeModal')">✕</button>
+        <form onsubmit="addEmployee(event)">
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" id="empFirstName" required>
+            </div>
+             <div class="form-group">
+                <label>Last Name</label>
+                <input type="text" id="empLastName" required>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="empEmail" required>
+            </div>
+            <div class="form-group">
+                <label>Department</label>
+                <select id="empDepartment" required>
+                    <option value="">-- Select --</option>
+                    <option value="HR">HR</option>
+                    <option value="Operation">Operation</option>
+                    <option value="Searching">Searching</option>
+                    <option value="Accounts">Accounts</option>
+                    <option value="ISV">ISV</option>
+                    <option value="Employe">Employe</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Position</label>
+                <input type="text" id="empPosition" required>
+            </div>
+            <div class="form-group">
+                <label>Date of Joining</label>
+                <input type="date" id="empDateJoining" required>
+            </div>
+            
+            <h4 style="margin-top: 20px; margin-bottom: 15px; border-top: 1px solid #eee; padding-top: 15px; color: #333;">User Credentials for Login</h4>
+            
+            <div class="form-group">
+                <label>Create User Account?</label>
+                <label style="display: flex; gap: 10px; align-items: center; margin-top: 8px;">
+                    <input type="checkbox" id="createUserAccount" onchange="toggleCredentialsFields()">
+                    Yes, create login credentials for this employee
+                </label>
+            </div>
+            
+            <div id="credentialsFieldsContainer" style="display: none;">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="empUsername" placeholder="Leave blank for auto-generation">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="empPassword" placeholder="Employee login password">
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="empConfirmPassword" placeholder="Confirm password">
+                </div>
+                <div style="background: #f0f4ff; padding: 12px; border-radius: 6px; font-size: 12px; margin-bottom: 15px; color: #555;">
+                    💡 <strong>Note:</strong> If username is left blank, it will be auto-generated as: firstname.lastname
+                </div>
+            </div>
+            
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addEmployeeModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Add Employee</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Announcement Modal -->
+<div id="announcementModal" class="modal">
+    <div class="modal-content">
+        <h3 class="modal-header">New Announcement</h3>
+        <button class="modal-close" onclick="closeModal('announcementModal')">✕</button>
+        <form onsubmit="addAnnouncement(event)">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" id="annTitle" required placeholder="Announcement title...">
+            </div>
+            <div class="form-group">
+                <label>Content</label>
+                <textarea id="annContent" required placeholder="Announcement content..." style="min-height: 150px;"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Target Audience</label>
+                <select id="annAudience" required>
+                    <option value="">-- Select --</option>
+                    <option value="all">All Employees</option>
+                    <option value="department">Department Specific</option>
+                    <option value="role">Role Specific</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label style="display: flex; gap: 10px; align-items: center;">
+                    <input type="checkbox" id="annNotify" checked>
+                    Send Email Notification
+                </label>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('announcementModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Post Announcement</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Employee Profile Modal -->
+<div id="employeeProfileModal" class="modal">
+    <div class="modal-content" style="max-width: 700px;">
+        <h3 class="modal-header">Employee Profile</h3>
+        <button class="modal-close" onclick="closeModal('employeeProfileModal')">✕</button>
+        <div id="employeeProfileContent" style="max-height: 600px; overflow-y: auto;">
+            <!-- Profile content loaded by JavaScript -->
+        </div>
+    </div>
+</div>
+
+<!-- Edit Employee Modal -->
+<div id="editEmployeeModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <h3 class="modal-header">Edit Employee Information</h3>
+        <button class="modal-close" onclick="closeModal('editEmployeeModal')">✕</button>
+        <form onsubmit="saveEmployeeChanges(event)" style="max-height: 600px; overflow-y: auto;">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>First Name</label>
+                    <input type="text" id="editEmpFirstName" required>
+                </div>
+                <div class="form-group">
+                    <label>Last Name</label>
+                    <input type="text" id="editEmpLastName" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="editEmpEmail" required>
+                </div>
+                <div class="form-group">
+                    <label>Phone</label>
+                    <input type="tel" id="editEmpPhone" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Department</label>
+                    <select id="editEmpDepartment" required>
+                        <option value="">-- Select --</option>
+                        <option value="HR">HR</option>
+                        <option value="Operation">Operation</option>
+                        <option value="Searching">Searching</option>
+                        <option value="Accounts">Accounts</option>
+                        <option value="ISV">ISV</option>
+                        <option value="Employe">Employe</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Position</label>
+                    <input type="text" id="editEmpPosition" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Date of Birth</label>
+                    <input type="date" id="editEmpDOB">
+                </div>
+                <div class="form-group">
+                    <label>Gender</label>
+                    <select id="editEmpGender">
+                        <option value="">-- Select --</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="editEmpAddress">
+                </div>
+                <div class="form-group">
+                    <label>City</label>
+                    <input type="text" id="editEmpCity">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>State/Province</label>
+                    <input type="text" id="editEmpState">
+                </div>
+                <div class="form-group">
+                    <label>Zip Code</label>
+                    <input type="text" id="editEmpZipcode">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Country</label>
+                    <input type="text" id="editEmpCountry">
+                </div>
+                <div class="form-group">
+                    <label>Blood Group</label>
+                    <select id="editEmpBloodGroup">
+                        <option value="">-- Select --</option>
+                        <option value="A+">A+</option>
+                        <option value="A-">A-</option>
+                        <option value="B+">B+</option>
+                        <option value="B-">B-</option>
+                        <option value="AB+">AB+</option>
+                        <option value="AB-">AB-</option>
+                        <option value="O+">O+</option>
+                        <option value="O-">O-</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Emergency Contact Name</label>
+                    <input type="text" id="editEmpEmergencyName">
+                </div>
+                <div class="form-group">
+                    <label>Emergency Contact Phone</label>
+                    <input type="tel" id="editEmpEmergencyPhone">
+                </div>
+            </div>
+            <div id="adminOnlyFieldsEdit" class="hidden">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Salary</label>
+                        <input type="number" id="editEmpSalary" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Bank Account</label>
+                        <input type="text" id="editEmpBankAccount">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Join Date</label>
+                        <input type="date" id="editEmpJoinDate">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="editEmpStatus">
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                            <option value="On Leave">On Leave</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('editEmployeeModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add Account Modal -->
+<div id="addAccountModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <h3 class="modal-header">Add New Account</h3>
+        <button class="modal-close" onclick="closeModal('addAccountModal')">✕</button>
+        <form onsubmit="addAccount(event)">
+            <div class="form-group">
+                <label>Account Name</label>
+                <input type="text" id="accountName" required placeholder="e.g., Client ABC, Project XYZ">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Account Type</label>
+                    <select id="accountType" required>
+                        <option value="">-- Select --</option>
+                        <option value="Client">Client</option>
+                        <option value="Project">Project</option>
+                        <option value="Vendor">Vendor</option>
+                        <option value="Internal">Internal</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Amount</label>
+                    <input type="number" id="accountAmount" required placeholder="0.00" step="0.01">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="accountStatus" required>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                        <option value="Suspended">Suspended</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="accountDescription" placeholder="Add description..."></textarea>
+                </div>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addAccountModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Add Account</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Add User Modal -->
+<div id="addUserModal" class="modal">
+    <div class="modal-content">
+        <h3 class="modal-header">Create New User</h3>
+        <button class="modal-close" onclick="closeModal('addUserModal')">✕</button>
+        <form onsubmit="createNewUser(event)">
+            <div class="form-group">
+                <label>Full Name</label>
+                <input type="text" id="newUserName" required placeholder="Enter full name">
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="newUsername" required placeholder="Enter username (must be unique)">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="newUserEmail" required placeholder="Enter email address">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="newUserPassword" required placeholder="Enter password">
+            </div>
+            <div class="form-group">
+                <label>Confirm Password</label>
+                <input type="password" id="newUserPasswordConfirm" required placeholder="Confirm password">
+            </div>
+            <div class="form-group">
+                <label>Role</label>
+                <select id="newUserRole" required>
+                    <option value="">-- Select Role --</option>
+                    <option value="employee">Employee</option>
+                    <option value="hr">HR Manager</option>
+                    <option value="admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label style="display: flex; gap: 10px; align-items: center;">
+                    <input type="checkbox" id="sendCredentials" checked>
+                    Send credentials to email
+                </label>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn btn-secondary" onclick="closeModal('addUserModal')">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create User</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Notifications Modal -->
+<div id="notificationsModal" class="modal">
+    <div class="modal-content" style="max-width: 600px;">
+        <h3 class="modal-header">Notifications</h3>
+        <button class="modal-close" onclick="closeModal('notificationsModal')">✕</button>
+        <div id="notificationsList" style="max-height: 400px; overflow-y: auto;">
+            <div style="padding: 15px; border-bottom: 1px solid #e0e0e0;">
+                <p style="margin: 0; font-size: 14px;">📋 Your leave request has been approved</p>
+                <p style="margin: 5px 0 0; font-size: 12px; color: #999;">2 hours ago</p>
+            </div>
+            <div style="padding: 15px; border-bottom: 1px solid #e0e0e0;">
+                <p style="margin: 0; font-size: 14px;">⭐ Performance review feedback available</p>
+                <p style="margin: 5px 0 0; font-size: 12px; color: #999;">1 day ago</p>
+            </div>
+            <div style="padding: 15px;">
+                <p style="margin: 0; font-size: 14px;">📢 New announcement posted</p>
+                <p style="margin: 5px 0 0; font-size: 12px; color: #999;">2 days ago</p>
+            </div>
+        </div>
+        <div style="padding: 15px; text-align: center; border-top: 1px solid #e0e0e0;">
+            <button class="btn btn-secondary" onclick="closeModal('notificationsModal')" style="width: auto;">Close</button>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<script>
+// ============ LocalStorage Management ============
+const DB = {
+    init() {
+        // Initialize empty collections if not exists
+        if (!localStorage.getItem('employees')) {
+            localStorage.setItem('employees', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('users')) {
+            // Initialize with one default admin account
+            localStorage.setItem('users', JSON.stringify([
+                { id: 'U001', username: 'amkadvisory', password: 'amk123', role: 'admin', name: 'Administrator', email: 'admin@amkadvisory.com', createdDate: new Date().toLocaleDateString() }
+            ]));
+        }
+        if (!localStorage.getItem('leaves')) {
+            localStorage.setItem('leaves', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('announcements')) {
+            localStorage.setItem('announcements', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('attendance')) {
+            localStorage.setItem('attendance', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('expenses')) {
+            localStorage.setItem('expenses', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('accounts')) {
+            localStorage.setItem('accounts', JSON.stringify([]));
+        }
+        if (!localStorage.getItem('settings')) {
+            localStorage.setItem('settings', JSON.stringify({
+                companyName: 'AMK Advisory',
+                companyEmail: 'info@amkadvisory.com',
+                companyPhone: '+1-800-123-4567',
+                companyAddress: '123 Business Street, City, Country 12345',
+                timezone: 'IST (UTC+5:30)',
+                selfService: {
+                    profileEdit: true,
+                    salarySlips: true,
+                    documents: true,
+                    expenseClaims: true,
+                    leaveRequest: true,
+                    performance: true
+                }
+            }));
+        }
+    },
+    
+    save(key, data) {
+        localStorage.setItem(key, JSON.stringify(data));
+    },
+    
+    get(key) {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    },
+    
+    add(key, item) {
+        let data = this.get(key) || [];
+        if (Array.isArray(data)) {
+            data.push(item);
+            this.save(key, data);
+        }
+    },
+    
+    remove(key, id) {
+        let data = this.get(key) || [];
+        if (Array.isArray(data)) {
+            data = data.filter(item => item.id !== id);
+            this.save(key, data);
+        }
+    }
+};
+
+// ============ Authentication ============
+let currentUser = null;
+let currentRole = null;
+let currentUserName = null;
+
+function handleLogin(event) {
+    event.preventDefault();
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    const users = DB.get('users') || [];
+    const user = users.find(u => u.username === username && u.password === password);
+
+    if (user) {
+        currentUser = username;
+        currentRole = user.role;
+        currentUserName = user.name;
+        showApp();
+    } else {
+        alert('Invalid username or password. Please try again.');
+    }
+}
+
+function handleLogout() {
+    if (confirm('Are you sure you want to logout?')) {
+        currentUser = null;
+        currentRole = null;
+        document.getElementById('loginPage').style.display = 'flex';
+        document.getElementById('appContainer').classList.remove('active');
+        document.getElementById('loginForm').reset();
+    }
+}
+
+function showApp() {
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('appContainer').classList.add('active');
+    
+    // Update sidebar info
+    document.getElementById('sidebarUserName').textContent = currentUserName || currentUser;
+    document.getElementById('sidebarUserRole').textContent = currentRole.charAt(0).toUpperCase() + currentRole.slice(1);
+    
+    // Show/hide role-specific items
+    const adminOnlyItems = document.querySelectorAll('.admin-only');
+    const hrOnlyItems = document.querySelectorAll('.hr-only');
+    const employeeOnlyItems = document.querySelectorAll('.employee-only');
+    
+    adminOnlyItems.forEach(item => {
+        item.style.display = currentRole === 'admin' ? 'block' : 'none';
+    });
+    hrOnlyItems.forEach(item => {
+        item.style.display = (currentRole === 'admin' || currentRole === 'hr') ? 'block' : 'none';
+    });
+    employeeOnlyItems.forEach(item => {
+        item.style.display = currentRole === 'employee' ? 'block' : 'none';
+    });
+    
+    // Get current employee info
+    const employees = DB.get('employees') || [];
+    const currentUserEmployee = employees.find(e => e.id === currentUser || (e.firstName + '.' + e.lastName) === currentUser);
+    const isAccountsDept = currentUserEmployee && currentUserEmployee.department === 'Accounts';
+    
+    // Restrict access for Accounts department employees
+    if (currentRole === 'employee' && isAccountsDept) {
+        // Accounts can ONLY access: Dashboard, Payroll, and Announcements
+        const allNavItems = document.querySelectorAll('.nav-item');
+        allNavItems.forEach(item => {
+            item.style.display = 'none'; // Hide all initially
+        });
+        
+        // Show only specific items for Accounts
+        const dashboardItem = document.querySelector('[onclick*="dashboard"]')?.closest('.nav-item');
+        const payrollItem = document.getElementById('payrollNavItem');
+        const announcementItem = document.querySelector('[onclick*="announcements"]')?.closest('.nav-item');
+        const logoutItem = document.querySelector('.logout-btn');
+        
+        if (dashboardItem) dashboardItem.style.display = 'block';
+        if (payrollItem) payrollItem.style.display = 'block';
+        if (announcementItem) announcementItem.style.display = 'block';
+        if (logoutItem) logoutItem.style.display = 'block';
+    } else if (currentRole === 'employee') {
+        // Regular employees - hide complex features
+        const complexItems = [
+            'employeesNavItem', 'performanceNavItem', 'analyticsNavItem',
+            'payrollNavItem', 'trainingNavItem', 'recruitmentNavItem', 'settingsNavItem', 'accountsNavItem'
+        ];
+        complexItems.forEach(id => {
+            const item = document.getElementById(id);
+            if (item) item.style.display = 'none';
+        });
+    } else {
+        // Show all items for admin and HR
+        const complexItems = [
+            'employeesNavItem', 'performanceNavItem', 'analyticsNavItem',
+            'payrollNavItem', 'trainingNavItem', 'recruitmentNavItem', 'settingsNavItem'
+        ];
+        complexItems.forEach(id => {
+            const item = document.getElementById(id);
+            if (item) {
+                const classList = item.className;
+                if (classList.includes('admin-only')) {
+                    item.style.display = currentRole === 'admin' ? 'block' : 'none';
+                } else if (classList.includes('hr-only')) {
+                    item.style.display = (currentRole === 'admin' || currentRole === 'hr') ? 'block' : 'none';
+                }
+            }
+        });
+        // Hide accounts nav item for admin/HR
+        const accountsNavItem = document.getElementById('accountsNavItem');
+        if (accountsNavItem) accountsNavItem.style.display = 'none';
+    }
+    
+    loadDashboard();
+}
+
+// ============ Navigation ============
+function navigateTo(page) {
+    // Hide all pages
+    const pages = document.querySelectorAll('.page-content');
+    pages.forEach(p => p.classList.add('hidden'));
+    
+    // Remove active class from all nav links
+    document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+    
+    // Show selected page
+    const pageElement = document.getElementById(page + 'Page');
+    if (pageElement) {
+        pageElement.classList.remove('hidden');
+    }
+    
+    // Show active nav link
+    if (event && event.target) {
+        event.target.classList.add('active');
+    }
+    
+    // Update page title
+    const titles = {
+        dashboard: 'Dashboard',
+        employees: 'Employee Directory',
+        leaves: 'Absence Management',
+        selfservice: 'Employee Self Service',
+        performance: 'Performance Reviews',
+        analytics: 'Analytics & Reports',
+        policies: 'Policies & Documents',
+        announcements: 'Announcements',
+        holidays: 'Holiday Calendar',
+        attendance: 'Attendance',
+        accounts: 'Accounts Management',
+        payroll: 'Payroll',
+        training: 'Training & Development',
+        recruitment: 'Recruitment',
+        settings: 'Settings',
+        profile: 'My Profile',
+        salaryslip: 'Salary Slips',
+        documents: 'My Documents',
+        expenses: 'Expense Claims'
+    };
+    document.getElementById('pageTitle').textContent = titles[page] || 'Page';
+    
+    // Load data for specific pages
+    if (page === 'employees') {
+        loadEmployeeData();
+    } else if (page === 'leaves') {
+        loadLeaveData();
+    } else if (page === 'announcements') {
+        loadAllAnnouncements();
+    } else if (page === 'attendance') {
+        loadAttendanceData();
+    } else if (page === 'accounts') {
+        loadAccountsData();
+    } else if (page === 'selfservice') {
+        applySelfServiceVisibility();
+    } else if (page === 'settings') {
+        loadUserManagement();
+        loadSelfServiceSettings();
+    }
+}
+
+// ============ Dashboard ============
+function loadDashboard() {
+    updateCurrentDate();
+    loadDashboardStats();
+    loadUpcomingHolidays();
+    loadRecentAnnouncements();
+}
+
+function loadDashboardStats() {
+    // Get all employees
+    const employees = DB.get('employees') || [];
+    const totalEmployees = employees.length;
+    
+    // Get attendance for today
+    const attendance = DB.get('attendance') || [];
+    const today = new Date().toISOString().split('T')[0];
+    const todayAttendance = attendance.filter(a => a.date === today);
+    const presentToday = todayAttendance.filter(a => a.status === 'Present').length;
+    
+    // Get leaves approved for today
+    const leaves = DB.get('leaves') || [];
+    const onLeaveToday = leaves.filter(l => {
+        const fromDate = l.fromDate;
+        const toDate = l.toDate;
+        return l.status === 'Approved' && fromDate <= today && toDate >= today;
+    }).length;
+    
+    // Get pending performance reviews
+    const reviews = DB.get('performanceReviews') || [];
+    const pendingReviews = reviews.filter(r => r.status === 'Pending').length;
+    
+    // Update the dashboard cards
+    document.getElementById('totalEmployees').textContent = totalEmployees;
+    document.getElementById('presentToday').textContent = presentToday;
+    document.getElementById('onLeaveToday').textContent = onLeaveToday;
+    document.getElementById('pendingReviews').textContent = pendingReviews;
+}
+
+function updateCurrentDate() {
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    const today = new Date().toLocaleDateString('en-US', options);
+    document.getElementById('currentDate').textContent = today;
+}
+
+function loadUpcomingHolidays() {
+    const html = `
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="padding: 10px; background: #f9f9f9; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong>🎊 Maha Shivaratri</strong>
+                    <p style="font-size: 12px; color: #999; margin: 2px 0;">March 8, 2026</p>
+                </div>
+                <span style="color: #667eea; font-weight: 600;">8 days</span>
+            </div>
+            <div style="padding: 10px; background: #f9f9f9; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong>🎊 Good Friday</strong>
+                    <p style="font-size: 12px; color: #999; margin: 2px 0;">April 10, 2026</p>
+                </div>
+                <span style="color: #667eea; font-weight: 600;">25 days</span>
+            </div>
+            <div style="padding: 10px; background: #f9f9f9; border-radius: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong>🎊 Ambedkar Jayanti</strong>
+                    <p style="font-size: 12px; color: #999; margin: 2px 0;">April 14, 2026</p>
+                </div>
+                <span style="color: #667eea; font-weight: 600;">29 days</span>
+            </div>
+        </div>
+    `;
+    document.getElementById('upcomingHolidaysList').innerHTML = html;
+}
+
+function loadRecentAnnouncements() {
+    const announcements = DB.get('announcements') || [];
+    if (announcements.length === 0) {
+        document.getElementById('recentAnnouncements').innerHTML = '<div style="padding: 15px; text-align: center; color: #999;">No announcements yet</div>';
+        return;
+    }
+    
+    const html = `
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            ${announcements.slice(-2).map(ann => `
+                <div style="padding: 10px; background: #f0f4ff; border-left: 3px solid #667eea; border-radius: 6px;">
+                    <p style="margin: 0; font-weight: 600; font-size: 14px;">🔔 ${ann.title}</p>
+                    <p style="margin: 5px 0 0; font-size: 12px; color: #666;">${ann.content.substring(0, 50)}...</p>
+                    <p style="margin: 5px 0 0; font-size: 11px; color: #999;">${ann.date}</p>
+                </div>
+            `).join('')}
+        </div>
+    `;
+    document.getElementById('recentAnnouncements').innerHTML = html;
+}
+
+// ============ Tab Navigation ============
+function switchTab(tabName) {
+    // Hide all tabs with this prefix
+    const tabPrefix = tabName.replace(/[0-9]/g, '');
+    const allTabs = document.querySelectorAll('.tab-content');
+    allTabs.forEach(tab => {
+        if (tab.id && tab.id.startsWith(tabPrefix)) {
+            tab.classList.remove('active');
+        }
+    });
+    
+    // Show selected tab
+    const tabElement = document.getElementById(tabName);
+    if (tabElement) {
+        tabElement.classList.add('active');
+    }
+    
+    // Update tab buttons
+    const tabs = event.target.parentElement.querySelectorAll('.tab');
+    tabs.forEach(tab => tab.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // Load data for specific tabs
+    if (tabName === 'userManagement') {
+        loadUserManagement();
+    } else if (tabName === 'selfServiceOptions') {
+        loadSelfServiceSettings();
+    }
+}
+
+function calculateLeaveDays() {
+    const fromDate = document.getElementById('leaveFromDate').value;
+    const toDate = document.getElementById('leaveToDate').value;
+    
+    if (fromDate && toDate) {
+        const from = new Date(fromDate);
+        const to = new Date(toDate);
+        const days = Math.ceil((to - from) / (1000 * 60 * 60 * 24)) + 1;
+        document.getElementById('leaveDays').value = days > 0 ? days : 0;
+    }
+}
+
+// ============ Modals ============
+function showAddEmployeeModal() {
+    document.getElementById('addEmployeeModal').classList.add('active');
+}
+
+function showAnnouncementModal() {
+    document.getElementById('announcementModal').classList.add('active');
+}
+
+function showNotifications() {
+    document.getElementById('notificationsModal').classList.add('active');
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+}
+
+// ============ Form Submissions ============
+function submitLeaveRequest(event) {
+    event.preventDefault();
+    const fromDate = document.getElementById('leaveFromDate').value;
+    const toDate = document.getElementById('leaveToDate').value;
+    const leaveType = document.getElementById('leaveType').value;
+    const days = document.getElementById('leaveDays').value;
+    const reason = document.getElementById('leaveReason').value;
+    
+    const employees = DB.get('employees') || [];
+    // Get current employee - for employee role, use first available employee or link to user profile
+    const currentEmployee = currentRole === 'employee' && employees.length > 0 
+        ? employees[0]  
+        : employees.find(e => e.linkedUser === currentUser) || employees[0] || {};
+    
+    const leave = {
+        id: Date.now(),
+        employee: currentEmployee.id || 'E001',
+        employeeName: currentEmployee.name || currentUserName || currentUser,
+        fromDate,
+        toDate,
+        type: leaveType,
+        days,
+        reason,
+        status: 'Pending',
+        dateSubmitted: new Date().toLocaleDateString(),
+        approvedBy: null,
+        approvedDate: null,
+        rejectedBy: null,
+        rejectedDate: null,
+        rejectionReason: null
+    };
+    
+    DB.add('leaves', leave);
+    alert('Leave request submitted successfully!');
+    event.target.reset();
+    loadLeaveData();
+}
+
+function loadLeaveData() {
+    const leaves = DB.get('leaves') || [];
+    const employees = DB.get('employees') || [];
+    
+    // Get current employee ID for filtering
+    const currentEmployee = currentRole === 'employee' && employees.length > 0 
+        ? employees[0]  
+        : employees.find(e => e.linkedUser === currentUser) || employees[0];
+    const currentEmpId = currentEmployee?.id || 'E001';
+    
+    const myLeaves = leaves.filter(l => l.employee === currentEmpId);
+    
+    const tbody = document.getElementById('leaveHistoryBody');
+    if (tbody) {
+        if (myLeaves.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No leave records</td></tr>';
+        } else {
+            tbody.innerHTML = myLeaves.map(leave => `
+                <tr>
+                    <td>${leave.fromDate}</td>
+                    <td>${leave.toDate}</td>
+                    <td>${leave.type}</td>
+                    <td>${leave.days}</td>
+                    <td><span class="badge badge-${leave.status === 'Approved' ? 'success' : leave.status === 'Rejected' ? 'danger' : 'warning'}">${leave.status}</span></td>
+                    <td>${leave.reason}</td>
+                </tr>
+            `).join('');
+        }
+    }
+    
+    // Load approve leaves for HR/Admin
+    if (currentRole === 'admin' || currentRole === 'hr') {
+        loadApproveLeaves();
+    }
+}
+
+function loadApproveLeaves() {
+    const leaves = DB.get('leaves') || [];
+    const pendingLeaves = leaves.filter(l => l.status === 'Pending');
+    const employees = DB.get('employees') || [];
+    
+    const tbody = document.getElementById('approveLeaveBody');
+    if (tbody) {
+        if (pendingLeaves.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">No pending requests</td></tr>';
+        } else {
+            tbody.innerHTML = pendingLeaves.map(leave => {
+                const emp = employees.find(e => e.id === leave.id || e.name === leave.employee);
+                return `
+                    <tr>
+                        <td>${leave.employeeName || 'Employee'}</td>
+                        <td>${leave.fromDate}</td>
+                        <td>${leave.toDate}</td>
+                        <td>${leave.type}</td>
+                        <td>${leave.days}</td>
+                        <td>${leave.reason.substring(0, 30)}...</td>
+                        <td><span class="badge badge-warning">${leave.status}</span></td>
+                        <td>
+                            <button onclick="approveLeave(${leave.id})" class="btn btn-primary" style="width: auto; padding: 5px 10px; font-size: 12px; margin-right: 5px;">Approve</button>
+                            <button onclick="rejectLeave(${leave.id})" class="btn btn-secondary" style="width: auto; padding: 5px 10px; font-size: 12px;">Reject</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+    }
+}
+
+function approveLeave(leaveId) {
+    const leaves = DB.get('leaves') || [];
+    const leave = leaves.find(l => l.id === leaveId);
+    if (leave) {
+        leave.status = 'Approved';
+        leave.approvedBy = currentUser;
+        leave.approvedDate = new Date().toLocaleDateString();
+        DB.save('leaves', leaves);
+        alert('Leave approved successfully!');
+        loadLeaveData();
+    }
+}
+
+function rejectLeave(leaveId) {
+    const reason = prompt('Enter reason for rejection:');
+    if (reason !== null) {
+        const leaves = DB.get('leaves') || [];
+        const leave = leaves.find(l => l.id === leaveId);
+        if (leave) {
+            leave.status = 'Rejected';
+            leave.rejectionReason = reason;
+            leave.rejectedBy = currentUser;
+            leave.rejectedDate = new Date().toLocaleDateString();
+            DB.save('leaves', leaves);
+            alert('Leave rejected successfully!');
+            loadLeaveData();
+        }
+    }
+}
+
+function addAnnouncement(event) {
+    event.preventDefault();
+    const title = document.getElementById('annTitle').value;
+    const content = document.getElementById('annContent').value;
+    const audience = document.getElementById('annAudience').value;
+    
+    const announcement = {
+        id: Date.now(),
+        title,
+        content,
+        audience,
+        author: currentRole,
+        date: new Date().toLocaleDateString()
+    };
+    
+    DB.add('announcements', announcement);
+    alert('Announcement posted successfully!');
+    closeModal('announcementModal');
+    loadRecentAnnouncements();
+    loadAllAnnouncements();
+    event.target.reset();
+}
+
+function loadAllAnnouncements() {
+    const announcements = DB.get('announcements') || [];
+    const announcementsList = document.getElementById('announcementsList');
+    
+    if (announcementsList && announcements.length > 0) {
+        announcementsList.innerHTML = `
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                ${announcements.reverse().map(ann => `
+                    <div style="padding: 15px; background: #f0f4ff; border-left: 4px solid #667eea; border-radius: 8px;">
+                        <h4 style="margin-bottom: 5px;">🔔 ${ann.title}</h4>
+                        <p style="font-size: 13px; color: #666; margin-bottom: 8px;">${ann.content}</p>
+                        <p style="font-size: 12px; color: #999;">Posted on: ${ann.date} by ${ann.author}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+}
+
+function toggleCredentialsFields() {
+    const checkbox = document.getElementById('createUserAccount');
+    const fieldsContainer = document.getElementById('credentialsFieldsContainer');
+    fieldsContainer.style.display = checkbox.checked ? 'block' : 'none';
+}
+
+function addEmployee(event) {
+    event.preventDefault();
+    
+    const firstName = document.getElementById('empFirstName').value;
+    const lastName = document.getElementById('empLastName').value;
+    const email = document.getElementById('empEmail').value;
+    const department = document.getElementById('empDepartment').value;
+    const position = document.getElementById('empPosition').value;
+    const dateJoining = document.getElementById('empDateJoining').value;
+    const createAccount = document.getElementById('createUserAccount').checked;
+    
+    const employees = DB.get('employees') || [];
+    const employeeId = 'E' + String(employees.length + 1).padStart(3, '0');
+    
+    const employee = {
+        id: employeeId,
+        firstName,
+        lastName,
+        name: firstName + ' ' + lastName,
+        email,
+        department,
+        position,
+        joinDate: dateJoining,
+        status: 'Active',
+        phone: '',
+        dob: '',
+        address: '',
+        city: '',
+        state: '',
+        zipcode: '',
+        country: '',
+        gender: '',
+        salary: '',
+        bankAccount: '',
+        emergencyContact: '',
+        emergencyPhone: '',
+        bloodGroup: ''
+    };
+    
+    DB.add('employees', employee);
+    
+    // Create user credentials if checkbox is selected
+    if (createAccount) {
+        let username = document.getElementById('empUsername').value.trim();
+        const password = document.getElementById('empPassword').value;
+        const confirmPassword = document.getElementById('empConfirmPassword').value;
+        
+        // Validate credentials
+        if (!username && !password) {
+            alert('Please enter username and password, or leave both blank for auto-generation.');
+            return;
+        }
+        
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+        
+        if (password.length < 4) {
+            alert('Password must be at least 4 characters long!');
+            return;
+        }
+        
+        // Auto-generate username if not provided
+        if (!username) {
+            username = (firstName + '.' + lastName).toLowerCase();
+        }
+        
+        // Check if username already exists
+        const users = DB.get('users') || [];
+        if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+            alert('Username already exists! Please enter a different username.');
+            return;
+        }
+        
+        // Create user account linked to employee
+        const userId = 'U' + String(users.length + 1).padStart(3, '0');
+        const user = {
+            id: userId,
+            username,
+            password,
+            role: 'employee',
+            name: firstName + ' ' + lastName,
+            email,
+            employeeId: employeeId,  // Link to employee
+            createdDate: new Date().toLocaleDateString()
+        };
+        
+        DB.add('users', user);
+        alert(`Employee added successfully!\n\nLogin Credentials:\nUsername: ${username}\nPassword: ${password}\n\nEmployee ID: ${employeeId}`);
+    } else {
+        alert('Employee added successfully! (No login credentials created)');
+    }
+    
+    closeModal('addEmployeeModal');
+    loadEmployeeData();
+    loadDashboard();
+    event.target.reset();
+    document.getElementById('createUserAccount').checked = false;
+    document.getElementById('credentialsFieldsContainer').style.display = 'none';
+}
+
+function loadEmployeeData() {
+    const employees = DB.get('employees') || [];
+    const tbody = document.getElementById('employeeTableBody');
+    
+    if (tbody) {
+        if (employees.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">No employees found</td></tr>';
+        } else {
+            tbody.innerHTML = employees.map(emp => `
+                <tr>
+                    <td>${emp.id}</td>
+                    <td>${emp.name}</td>
+                    <td>${emp.position}</td>
+                    <td>${emp.department}</td>
+                    <td><span class="badge badge-success">${emp.status}</span></td>
+                    <td>${emp.email}</td>
+                    <td>
+                        <button onclick="viewEmployeeProfile('${emp.id}')" style="color: #667eea; background: none; border: none; cursor: pointer; font-size: 12px; font-weight: 600;">
+                            View
+                        </button>
+                        ${currentRole === 'admin' ? `<button onclick="editEmployeeModal('${emp.id}')" style="color: #667eea; background: none; border: none; cursor: pointer; font-size: 12px; font-weight: 600; margin-left: 10px;">Edit</button>
+                            <button onclick="deleteEmployee('${emp.id}', '${emp.name}')" style="color: #e74c3c; background: none; border: none; cursor: pointer; font-size: 12px; font-weight: 600; margin-left: 10px;">Delete</button>` : ''}
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+}
+
+function deleteEmployee(empId, empName) {
+    if (!confirm(`Are you sure you want to delete "${empName}"? This action is permanent and will also delete all their leave records and data.`)) {
+        return;
+    }
+    
+    // Delete employee from employees table
+    const employees = DB.get('employees') || [];
+    const filteredEmployees = employees.filter(e => e.id !== empId);
+    DB.save('employees', filteredEmployees);
+    
+    // Delete associated leave records
+    const leaves = DB.get('leaves') || [];
+    const filteredLeaves = leaves.filter(l => l.employee !== empId);
+    DB.save('leaves', filteredLeaves);
+    
+    // Delete associated attendance records
+    const attendance = DB.get('attendance') || [];
+    const filteredAttendance = attendance.filter(a => a.employee !== empId);
+    DB.save('attendance', filteredAttendance);
+    
+    // Delete associated expenses
+    const expenses = DB.get('expenses') || [];
+    const filteredExpenses = expenses.filter(e => e.employee !== empId);
+    DB.save('expenses', filteredExpenses);
+    
+    alert(`Employee "${empName}" has been deleted successfully. All associated records have been removed.`);
+    loadEmployeeData();
+}
+
+// ============ Accounts Management ============
+function showAddAccountModal() {
+    // Prevent Accounts department from adding accounts (financial view-only)
+    const employees = DB.get('employees') || [];
+    const currentUserEmployee = employees.find(e => e.id === currentUser || (e.firstName + '.' + e.lastName) === currentUser);
+    const isAccountsDept = currentUserEmployee && currentUserEmployee.department === 'Accounts';
+    
+    if (isAccountsDept) {
+        alert('⛔ Accounts department has view-only access to financial data. You cannot create new accounts.');
+        return;
+    }
+    
+    openModal('addAccountModal');
+}
+
+function addAccount(event) {
+    event.preventDefault();
+    
+    const accountName = document.getElementById('accountName').value;
+    const accountType = document.getElementById('accountType').value;
+    const accountAmount = parseFloat(document.getElementById('accountAmount').value);
+    const accountStatus = document.getElementById('accountStatus').value;
+    const accountDescription = document.getElementById('accountDescription').value;
+    
+    const accounts = DB.get('accounts') || [];
+    const account = {
+        id: 'ACC' + String(accounts.length + 1).padStart(4, '0'),
+        name: accountName,
+        type: accountType,
+        amount: accountAmount,
+        status: accountStatus,
+        description: accountDescription,
+        createdDate: new Date().toLocaleDateString(),
+        createdBy: currentUser
+    };
+    
+    DB.add('accounts', account);
+    alert('Account added successfully! Account ID: ' + account.id);
+    closeModal('addAccountModal');
+    loadAccountsData();
+    event.target.reset();
+}
+
+function loadAccountsData() {
+    const accounts = DB.get('accounts') || [];
+    const tbody = document.getElementById('accountsTableBody');
+    
+    // Check if current user is from Accounts department
+    const employees = DB.get('employees') || [];
+    const currentUserEmployee = employees.find(e => e.id === currentUser || (e.firstName + '.' + e.lastName) === currentUser);
+    const isAccountsDept = currentUserEmployee && currentUserEmployee.department === 'Accounts';
+    
+    // Show/hide access note
+    const accessNote = document.getElementById('accountsAccessNote');
+    if (accessNote) {
+        accessNote.style.display = isAccountsDept ? 'block' : 'none';
+    }
+    
+    // Hide add button for Accounts department users (view-only)
+    const addBtn = document.getElementById('addAccountBtn');
+    if (addBtn) {
+        addBtn.style.display = isAccountsDept ? 'none' : 'block';
+    }
+    
+    if (tbody) {
+        if (accounts.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">No accounts found</td></tr>';
+        } else {
+            tbody.innerHTML = accounts.map(acc => `
+                <tr>
+                    <td><strong>${acc.id}</strong></td>
+                    <td>${acc.name}</td>
+                    <td>${acc.type}</td>
+                    <td>₹ ${acc.amount.toFixed(2)}</td>
+                    <td><span class="badge ${acc.status === 'Active' ? 'badge-success' : acc.status === 'Inactive' ? 'badge-warning' : 'badge-danger'}">${acc.status}</span></td>
+                    <td>${acc.createdDate}</td>
+                    <td>
+                        <button onclick="viewAccountDetails('${acc.id}')" style="color: #667eea; background: none; border: none; cursor: pointer; font-size: 12px; font-weight: 600;">
+                            View
+                        </button>
+                        <button onclick="editAccount('${acc.id}')" style="color: #667eea; background: none; border: none; cursor: pointer; font-size: 12px; font-weight: 600; margin-left: 10px;">Edit</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+}
+
+function viewAccountDetails(accId) {
+    const accounts = DB.get('accounts') || [];
+    const account = accounts.find(a => a.id === accId);
+    
+    if (account) {
+        alert(`Account Details:\n\nID: ${account.id}\nName: ${account.name}\nType: ${account.type}\nAmount: ₹ ${account.amount.toFixed(2)}\nStatus: ${account.status}\nDescription: ${account.description}\nCreated: ${account.createdDate}`);
+    }
+}
+
+function editAccount(accId) {
+    // Check if current user is from Accounts department
+    const employees = DB.get('employees') || [];
+    const currentUserEmployee = employees.find(e => e.id === currentUser || (e.firstName + '.' + e.lastName) === currentUser);
+    const isAccountsDept = currentUserEmployee && currentUserEmployee.department === 'Accounts';
+    
+    if (isAccountsDept) {
+        alert('⛔ View-only access: Accounts department cannot edit financial records.');
+        return;
+    }
+    alert('Edit account: ' + accId);
+}
+
+function deleteAccount(accId, accName) {
+    // Check if current user is from Accounts department
+    const employees = DB.get('employees') || [];
+    const currentUserEmployee = employees.find(e => e.id === currentUser || (e.firstName + '.' + e.lastName) === currentUser);
+    const isAccountsDept = currentUserEmployee && currentUserEmployee.department === 'Accounts';
+    
+    if (isAccountsDept) {
+        alert('⛔ Accounts department does not have permission to delete financial records.');
+        return;
+    }
+    
+    if (!confirm(`Are you sure you want to delete account "${accName}"?`)) {
+        return;
+    }
+    
+    const accounts = DB.get('accounts') || [];
+    const filteredAccounts = accounts.filter(a => a.id !== accId);
+    DB.save('accounts', filteredAccounts);
+    
+    alert(`Account "${accName}" has been deleted successfully.`);
+    loadAccountsData();
+}
+
+function submitExpense(event) {
+    event.preventDefault();
+    const form = event.target;
+    const formData = new FormData(form);
+    
+    const expense = {
+        id: Date.now(),
+        employee: currentUser,
+        date: document.getElementById('expenseDate').value,
+        category: document.getElementById('expenseCategory').value,
+        amount: document.getElementById('expenseAmount').value,
+        paymentMethod: document.getElementById('expensePaymentMethod').value,
+        description: document.getElementById('expenseDescription').value,
+        status: 'Pending',
+        dateSubmitted: new Date().toLocaleDateString()
+    };
+    
+    DB.add('expenses', expense);
+    alert('Expense claim submitted successfully!');
+    event.target.reset();
+}
+
+function saveProfile(event) {
+    event.preventDefault();
+    const profile = {
+        firstName: document.getElementById('profileFirstName').value,
+        lastName: document.getElementById('profileLastName').value,
+        email: document.getElementById('profileEmail').value,
+        phone: document.getElementById('profilePhone').value,
+        dob: document.getElementById('profileDOB').value,
+        address: document.getElementById('profileAddress').value
+    };
+    
+    localStorage.setItem('userProfile_' + currentUser, JSON.stringify(profile));
+    alert('Profile updated successfully!');
+}
+
+function submitSelfAppraisal(event) {
+    event.preventDefault();
+    
+    const appraisal = {
+        id: Date.now(),
+        employee: currentUser,
+        period: document.getElementById('appraisalPeriod').value,
+        achievements: document.getElementById('achievements').value,
+        improvements: document.getElementById('improvements').value,
+        goals: document.getElementById('goals').value,
+        rating: document.getElementById('selfRating').value,
+        dateSubmitted: new Date().toLocaleDateString(),
+        status: 'Submitted'
+    };
+    
+    // Store in a performanceReviews collection
+    let reviews = DB.get('performanceReviews') || [];
+    reviews.push(appraisal);
+    DB.save('performanceReviews', reviews);
+    
+    alert('Self appraisal submitted successfully!');
+    event.target.reset();
+}
+
+function markAttendance(event) {
+    event.preventDefault();
+    
+    const attendance = {
+        id: Date.now(),
+        employee: currentUser,
+        date: document.getElementById('attendanceDate').value,
+        checkIn: document.getElementById('checkInTime').value,
+        checkOut: document.getElementById('checkOutTime').value,
+        status: document.getElementById('attendanceStatus').value,
+        remarks: document.getElementById('attendanceRemarks').value
+    };
+    
+    DB.add('attendance', attendance);
+    alert('Attendance marked successfully!');
+    event.target.reset();
+}
+
+function processPayroll(event) {
+    event.preventDefault();
+    alert('Payroll processed successfully!');
+    event.target.reset();
+}
+
+function saveSettings(event) {
+    event.preventDefault();
+    
+    const settings = {
+        companyName: document.getElementById('companyName').value,
+        companyEmail: document.getElementById('companyEmail').value,
+        companyPhone: document.getElementById('companyPhone').value,
+        timezone: document.getElementById('timezone').value,
+        companyAddress: document.getElementById('companyAddress').value
+    };
+    
+    DB.save('settings', settings);
+    alert('Settings saved successfully!');
+}
+
+// ============ User Management ============
+function showAddUserModal() {
+    if (currentRole !== 'admin') {
+        alert('Only admins can create users');
+        return;
+    }
+    document.getElementById('addUserModal').classList.add('active');
+}
+
+function createNewUser(event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('newUserName').value;
+    const username = document.getElementById('newUsername').value;
+    const email = document.getElementById('newUserEmail').value;
+    const password = document.getElementById('newUserPassword').value;
+    const passwordConfirm = document.getElementById('newUserPasswordConfirm').value;
+    const role = document.getElementById('newUserRole').value;
+    
+    // Validation
+    if (password !== passwordConfirm) {
+        alert('Passwords do not match!');
+        return;
+    }
+    
+    if (password.length < 6) {
+        alert('Password must be at least 6 characters!');
+        return;
+    }
+    
+    const users = DB.get('users') || [];
+    
+    // Check if username already exists
+    if (users.find(u => u.username === username)) {
+        alert('Username already exists. Please choose a different username.');
+        return;
+    }
+    
+    // Create new user
+    const newUser = {
+        id: 'U' + String(users.length + 1).padStart(3, '0'),
+        username,
+        password,
+        role,
+        name,
+        email,
+        createdDate: new Date().toLocaleDateString()
+    };
+    
+    DB.add('users', newUser);
+    alert(`User "${username}" created successfully!\n\nUsername: ${username}\nPassword: ${password}\nRole: ${role}`);
+    
+    closeModal('addUserModal');
+    loadUserManagement();
+    document.getElementById('addUserModal').querySelector('form').reset();
+}
+
+function loadUserManagement() {
+    const users = DB.get('users') || [];
+    const tbody = document.getElementById('userManagementBody');
+    
+    if (tbody) {
+        if (users.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No users found</td></tr>';
+        } else {
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td><strong>${user.username}</strong></td>
+                    <td>${user.name}</td>
+                    <td><span class="badge badge-info">${user.role.charAt(0).toUpperCase() + user.role.slice(1)}</span></td>
+                    <td>${user.email}</td>
+                    <td>${user.createdDate}</td>
+                    <td>
+                        ${currentRole === 'admin' && user.id !== 'U001' ? `<button onclick="deleteUser('${user.username}')" class="btn btn-secondary" style="width: auto; padding: 5px 10px; font-size: 12px; color: #e74c3c;">Delete</button>` : '<small>Admin</small>'}
+                    </td>
+                </tr>
+            `).join('');
+        }
+    }
+}
+
+function deleteUser(username) {
+    if (!confirm('Are you sure you want to delete this user? This action is permanent.')) {
+        return;
+    }
+    
+    const users = DB.get('users') || [];
+    const filteredUsers = users.filter(u => u.username !== username);
+    
+    DB.save('users', filteredUsers);
+    alert('User deleted successfully!');
+    loadUserManagement();
+}
+
+// ============ Self-Service Management ============
+function toggleSelfService(option, enabled) {
+    const settings = DB.get('settings') || {};
+    if (!settings.selfService) {
+        settings.selfService = {};
+    }
+    
+    settings.selfService[option] = enabled;
+    DB.save('settings', settings);
+    
+    // Apply visibility changes immediately
+    applySelfServiceVisibility();
+    alert(`${option.charAt(0).toUpperCase() + option.slice(1)} ${enabled ? 'enabled' : 'disabled'} for employees!`);
+}
+
+function loadSelfServiceSettings() {
+    const settings = DB.get('settings') || {};
+    const selfService = settings.selfService || {};
+    
+    document.getElementById('enableProfileEdit').checked = selfService.profileEdit !== false;
+    document.getElementById('enableSalarySlips').checked = selfService.salarySlips !== false;
+    document.getElementById('enableDocuments').checked = selfService.documents !== false;
+    document.getElementById('enableExpenseClaims').checked = selfService.expenseClaims !== false;
+    document.getElementById('enableLeaveRequest').checked = selfService.leaveRequest !== false;
+    document.getElementById('enablePerformance').checked = selfService.performance !== false;
+}
+
+function isSelfServiceEnabled(option) {
+    const settings = DB.get('settings') || {};
+    const selfService = settings.selfService || {};
+    return selfService[option] !== false;  // Default to true if not set
+}
+
+function applySelfServiceVisibility() {
+    // Show/hide self-service cards based on settings
+    document.getElementById('profileCard').style.display = isSelfServiceEnabled('profileEdit') ? 'block' : 'none';
+    document.getElementById('salaryCard').style.display = isSelfServiceEnabled('salarySlips') ? 'block' : 'none';
+    document.getElementById('documentsCard').style.display = isSelfServiceEnabled('documents') ? 'block' : 'none';
+    document.getElementById('expensesCard').style.display = isSelfServiceEnabled('expenseClaims') ? 'block' : 'none';
+}
+
+function saveSystemSettings(event) {
+    event.preventDefault();
+    alert('System settings updated successfully!');
+}
+
+function resetSystemConfirm() {
+    const warning = confirm(
+        '⚠️ WARNING: You are about to DELETE ALL DATA!\\n\\n' +
+        'This will permanently remove:\\n' +
+        '- All employees\\n' +
+        '- All leave requests\\n' +
+        '- All announcements\\n' +
+        '- All attendance records\\n' +
+        '- All expenses\\n' +
+        '- All performance reviews\\n\\n' +
+        'The admin account will remain. This CANNOT be undone!\\n\\n' +
+        'Click OK to proceed.'
+    );
+    
+    if (warning) {
+        const confirmation = prompt('Type YES to confirm system reset:');
+        if (confirmation === 'YES') {
+            resetSystem();
+        } else {
+            alert('System reset cancelled.');
+        }
+    }
+}
+
+function resetSystem() {
+    // Keep admin user, reset everything else
+    const adminUser = [
+        { id: 'U001', username: 'amkadvisory', password: 'amk123', role: 'admin', name: 'Administrator', email: 'admin@amkadvisory.com', createdDate: new Date().toLocaleDateString() }
+    ];
+    
+    // Reset all collections
+    localStorage.setItem('users', JSON.stringify(adminUser));
+    localStorage.setItem('employees', JSON.stringify([]));
+    localStorage.setItem('leaves', JSON.stringify([]));
+    localStorage.setItem('announcements', JSON.stringify([]));
+    localStorage.setItem('attendance', JSON.stringify([]));
+    localStorage.setItem('expenses', JSON.stringify([]));
+    localStorage.setItem('accounts', JSON.stringify([]));
+    localStorage.setItem('performanceReviews', JSON.stringify([]));
+    
+    alert('✅ System has been reset to zero information! Refreshing page...');
+    location.reload();
+}
+
+function loadAttendanceData() {
+    const attendanceMonth = document.getElementById('attendanceMonth').value;
+    const attendanceBody = document.getElementById('attendanceBody');
+    
+    if (!attendanceMonth) {
+        attendanceBody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">Select a month to view data</td></tr>';
+        return;
+    }
+    
+    const attendance = DB.get('attendance') || [];
+    const myAttendance = attendance.filter(a => a.employee === currentUser && a.date.startsWith(attendanceMonth));
+    
+    if (attendanceBody) {
+        if (myAttendance.length === 0) {
+            attendanceBody.innerHTML = `<tr><td colspan="5" class="text-center text-muted">No attendance records for ${attendanceMonth}</td></tr>`;
+        } else {
+            attendanceBody.innerHTML = myAttendance.map(att => `
+                <tr>
+                    <td>${att.date}</td>
+                    <td>${att.checkIn}</td>
+                    <td>${att.checkOut}</td>
+                    <td>8 hours</td>
+                    <td><span class="badge badge-success">${att.status}</span></td>
+                </tr>
+            `).join('');
+        }
+    }
+}
+
+// ============ Utility Functions ============
+function updateHolidayCalendar() {
+    const month = parseInt(document.getElementById('holidayMonth').value);
+    const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                        'July', 'August', 'September', 'October', 'November', 'December'];
+    
+    document.getElementById('calendarMonth').textContent = monthNames[month] + ' 2026';
+    
+    const holidays = {
+        0: [26],
+        2: [8],
+        3: [10, 14],
+        4: [1],
+        7: [15],
+        9: [2],
+        11: [25]
+    };
+    
+    const firstDay = new Date(2026, month, 1).getDay();
+    const daysInMonth = new Date(2026, month + 1, 0).getDate();
+    
+    let html = '';
+    for (let i = 0; i < firstDay; i++) {
+        html += '<div class="day-item" style="opacity: 0.3;"></div>';
+    }
+    
+    const holidayDates = holidays[month] || [];
+    for (let day = 1; day <= daysInMonth; day++) {
+        const isHoliday = holidayDates.includes(day);
+        html += `<div class="day-item ${isHoliday ? 'holiday' : ''}">${day}</div>`;
+    }
+    
+    document.getElementById('calendarDays').innerHTML = html;
+}
+
+function viewEmployeeProfile(empId) {
+    const employees = DB.get('employees') || [];
+    const employee = employees.find(e => e.id === empId);
+    
+    if (!employee) {
+        alert('Employee not found');
+        return;
+    }
+    
+    const profileHTML = `
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+                <h4 style="margin-bottom: 15px; color: #667eea; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">Basic Information</h4>
+                <p><strong>Name:</strong> ${employee.name || 'N/A'}</p>
+                <p><strong>Employee ID:</strong> ${employee.id}</p>
+                <p><strong>Email:</strong> ${employee.email || 'N/A'}</p>
+                <p><strong>Phone:</strong> ${employee.phone || 'N/A'}</p>
+                <p><strong>Department:</strong> ${employee.department || 'N/A'}</p>
+                <p><strong>Position/Role:</strong> ${employee.position || 'N/A'}</p>
+                <p><strong>Join Date:</strong> ${employee.joinDate || 'N/A'}</p>
+                <p><strong>Status:</strong> <span class="badge badge-success">${employee.status || 'N/A'}</span></p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 15px; color: #667eea; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">Personal Information</h4>
+                <p><strong>Date of Birth:</strong> ${employee.dob || 'N/A'}</p>
+                <p><strong>Gender:</strong> ${employee.gender || 'N/A'}</p>
+                <p><strong>Blood Group:</strong> ${employee.bloodGroup || 'N/A'}</p>
+                <p><strong>Address:</strong> ${employee.address || 'N/A'}</p>
+                <p><strong>City:</strong> ${employee.city || 'N/A'}</p>
+                <p><strong>State/Province:</strong> ${employee.state || 'N/A'}</p>
+                <p><strong>Zip Code:</strong> ${employee.zipcode || 'N/A'}</p>
+                <p><strong>Country:</strong> ${employee.country || 'N/A'}</p>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 15px; color: #667eea; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">Emergency Contact</h4>
+                <p><strong>Name:</strong> ${employee.emergencyContact || 'N/A'}</p>
+                <p><strong>Phone:</strong> ${employee.emergencyPhone || 'N/A'}</p>
+            </div>
+            ${currentRole === 'admin' ? `
+            <div>
+                <h4 style="margin-bottom: 15px; color: #667eea; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px;">Salary & Payment</h4>
+                <p><strong>Salary:</strong> ₹${employee.salary || 'N/A'}</p>
+                <p><strong>Bank Account:</strong> ${employee.bankAccount ? employee.bankAccount.substring(0, 6) + '...' + employee.bankAccount.substring(employee.bankAccount.length - 4) : 'N/A'}</p>
+            </div>
+            ` : ''}
+        </div>
+        <div style="margin-top: 20px; text-align: center;">
+            ${currentRole === 'admin' || (currentRole === 'employee' && currentUser === empId) ? `
+                <button class="btn btn-primary" style="width: auto;" onclick="editEmployeeModal('${empId}')">Edit Information</button>
+            ` : ''}
+            <button class="btn btn-secondary" style="width: auto; margin-left: 10px;" onclick="closeModal('employeeProfileModal')">Close</button>
+        </div>
+    `;
+    
+    document.getElementById('employeeProfileContent').innerHTML = profileHTML;
+    document.getElementById('employeeProfileModal').classList.add('active');
+}
+
+function editEmployeeModal(empId) {
+    const employees = DB.get('employees') || [];
+    const employee = employees.find(e => e.id === empId);
+    
+    if (!employee) {
+        alert('Employee not found');
+        return;
+    }
+    
+    // Populate form
+    document.getElementById('editEmpFirstName').value = employee.firstName || '';
+    document.getElementById('editEmpLastName').value = employee.lastName || '';
+    document.getElementById('editEmpEmail').value = employee.email || '';
+    document.getElementById('editEmpPhone').value = employee.phone || '';
+    document.getElementById('editEmpDepartment').value = employee.department || '';
+    document.getElementById('editEmpPosition').value = employee.position || '';
+    document.getElementById('editEmpDOB').value = employee.dob || '';
+    document.getElementById('editEmpGender').value = employee.gender || '';
+    document.getElementById('editEmpAddress').value = employee.address || '';
+    document.getElementById('editEmpCity').value = employee.city || '';
+    document.getElementById('editEmpState').value = employee.state || '';
+    document.getElementById('editEmpZipcode').value = employee.zipcode || '';
+    document.getElementById('editEmpCountry').value = employee.country || '';
+    document.getElementById('editEmpBloodGroup').value = employee.bloodGroup || '';
+    document.getElementById('editEmpEmergencyName').value = employee.emergencyContact || '';
+    document.getElementById('editEmpEmergencyPhone').value = employee.emergencyPhone || '';
+    
+    // Show admin only fields if admin
+    const adminFields = document.getElementById('adminOnlyFieldsEdit');
+    if (currentRole === 'admin') {
+        adminFields.classList.remove('hidden');
+        document.getElementById('editEmpSalary').value = employee.salary || '';
+        document.getElementById('editEmpBankAccount').value = employee.bankAccount || '';
+        document.getElementById('editEmpJoinDate').value = employee.joinDate || '';
+        document.getElementById('editEmpStatus').value = employee.status || 'Active';
+    } else {
+        adminFields.classList.add('hidden');
+    }
+    
+    // Store the ID for saving
+    document.getElementById('editEmployeeModal').dataset.empId = empId;
+    
+    closeModal('employeeProfileModal');
+    document.getElementById('editEmployeeModal').classList.add('active');
+}
+
+function saveEmployeeChanges(event) {
+    event.preventDefault();
+    
+    const empId = document.getElementById('editEmployeeModal').dataset.empId;
+    const employees = DB.get('employees') || [];
+    const empIndex = employees.findIndex(e => e.id === empId);
+    
+    if (empIndex === -1) {
+        alert('Employee not found');
+        return;
+    }
+    
+    const employee = employees[empIndex];
+    
+    // Update basic information (all roles can edit these)
+    employee.firstName = document.getElementById('editEmpFirstName').value;
+    employee.lastName = document.getElementById('editEmpLastName').value;
+    employee.name = employee.firstName + ' ' + employee.lastName;
+    employee.email = document.getElementById('editEmpEmail').value;
+    employee.phone = document.getElementById('editEmpPhone').value;
+    employee.department = document.getElementById('editEmpDepartment').value;
+    employee.position = document.getElementById('editEmpPosition').value;
+    employee.dob = document.getElementById('editEmpDOB').value;
+    employee.gender = document.getElementById('editEmpGender').value;
+    employee.address = document.getElementById('editEmpAddress').value;
+    employee.city = document.getElementById('editEmpCity').value;
+    employee.state = document.getElementById('editEmpState').value;
+    employee.zipcode = document.getElementById('editEmpZipcode').value;
+    employee.country = document.getElementById('editEmpCountry').value;
+    employee.bloodGroup = document.getElementById('editEmpBloodGroup').value;
+    employee.emergencyContact = document.getElementById('editEmpEmergencyName').value;
+    employee.emergencyPhone = document.getElementById('editEmpEmergencyPhone').value;
+    
+    // Update admin-only fields if admin
+    if (currentRole === 'admin') {
+        employee.salary = document.getElementById('editEmpSalary').value;
+        employee.bankAccount = document.getElementById('editEmpBankAccount').value;
+        employee.joinDate = document.getElementById('editEmpJoinDate').value;
+        employee.status = document.getElementById('editEmpStatus').value;
+    }
+    
+    employees[empIndex] = employee;
+    DB.save('employees', employees);
+    
+    alert('Employee information updated successfully!');
+    closeModal('editEmployeeModal');
+    loadEmployeeData();
+}
+
+// Close modals when clicking outside
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.classList.remove('active');
+    }
+}
+
+// Initialize on page load
+window.onload = function() {
+    // Initialize database
+    DB.init();
+    
+    updateHolidayCalendar();
+    
+    // Load employee data from localStorage
+    loadEmployeeData();
+    
+    // Load payroll data
+    const employees = DB.get('employees') || [];
+    const payrollBody = document.getElementById('payrollTableBody');
+    if (payrollBody) {
+        payrollBody.innerHTML = employees.map(emp => `
+            <tr>
+                <td>${emp.name}</td>
+                <td>${emp.position}</td>
+                <td>₹50,000</td>
+                <td>₹0</td>
+                <td><span class="badge badge-success">Paid</span></td>
+                <td>
+                    <button style="color: #667eea; background: none; border: none; cursor: pointer; font-size: 12px; font-weight: 600;">
+                        View
+                    </button>
+                </td>
+            </tr>
+        `).join('');
+    }
+    
+    // Load announcements
+    loadAllAnnouncements();
+    
+    // Load leave data for current user
+    loadLeaveData();
+};
+</script>
+
+</html>
